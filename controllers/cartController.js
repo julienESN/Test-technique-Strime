@@ -1,5 +1,5 @@
 const CartModel = require('../models/cartModel');
-
+const ProductModel = require('../models/productModel');
 exports.createCart = async (req, res) => {
   try {
     await CartModel.createCart(req.body.userId);
@@ -9,7 +9,18 @@ exports.createCart = async (req, res) => {
     res.status(500).send(err.message);
   }
 };
-
+exports.getCart = async (req, res) => {
+  try {
+    const cart = await CartModel.getCart(req.params.id);
+    if (!cart) {
+      return res.status(404).send('Cart not found');
+    }
+    res.status(200).json(cart);
+  } catch (err) {
+    console.error(err); 
+    res.status(500).send('Server error');
+  }
+};
 exports.addProduct = async (req, res) => {
   try {
     const product = await ProductModel.getProduct(req.body.productId);
@@ -23,7 +34,8 @@ exports.addProduct = async (req, res) => {
     );
     res.status(201).send('Product added to cart');
   } catch (err) {
-    res.status(500).send('Server error');
+    console.error(err); 
+    res.status(500).send(err.message);
   }
 };
 
@@ -32,7 +44,8 @@ exports.removeProduct = async (req, res) => {
     await CartModel.removeProduct(req.params.id, req.params.productId);
     res.status(200).send('Product removed from cart');
   } catch (err) {
-    res.status(500).send('Server error');
+    console.error(err); 
+    res.status(500).send(err.message);
   }
 };
 
@@ -45,7 +58,8 @@ exports.updateQuantity = async (req, res) => {
     );
     res.status(200).send('Product quantity updated');
   } catch (err) {
-    res.status(500).send('Server error');
+    console.error(err); // Ajoute cette ligne pour afficher l'erreur dans la console
+    res.status(500).send(err.message);
   }
 };
 
@@ -54,6 +68,7 @@ exports.checkout = async (req, res) => {
     await CartModel.checkout(req.params.id);
     res.status(200).send('Checkout successful');
   } catch (err) {
-    res.status(500).send('Server error');
+    console.error(err); // Ajoute cette ligne pour afficher l'erreur dans la console
+    res.status(500).send(err.message);
   }
 };
