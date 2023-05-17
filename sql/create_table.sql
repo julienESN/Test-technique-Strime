@@ -15,8 +15,9 @@ CREATE TABLE IF NOT EXISTS "Order" (
     user_id INTEGER REFERENCES "User"(id),
     product_id INTEGER REFERENCES "Product"(id),
     quantity INTEGER NOT NULL
+    
 );
-
+ALTER TABLE "Order" ADD COLUMN total_amount DECIMAL(10,2);
 CREATE TABLE IF NOT EXISTS "Cart" (
     id SERIAL PRIMARY KEY,
     user_id INTEGER REFERENCES "User"(id)
